@@ -1,6 +1,5 @@
 package net.cytonic.cytosis.utils;
 
-import net.cytonic.cytosis.data.objects.BanData;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -207,21 +206,5 @@ public interface Msg {
 
     static String stripTags(String str) {
         return MiniMessage.miniMessage().stripTags(str);
-    }
-
-    /**
-     * Gets a formatted ban message
-     *
-     * @param banData the data to format
-     * @return the formatted message in Component format
-     */
-    static Component formatBanMessage(BanData banData) {
-        if (!banData.isBanned()) return Component.empty();
-
-        return Component.empty()
-                .append(Msg.mm("<red>You are currently banned from the Cytonic Network!").appendNewline().appendNewline())
-                .append(Msg.mm("<gray>Reason:<gray> <white>" + banData.reason() + "</white>").appendNewline())
-                .append(Msg.mm("<gray>Expires:</gray> <white>" + DurationParser.unparse(banData.expiry(), " ") + "</white>").appendNewline().appendNewline())
-                .append(Msg.mm("<gray>Appeal at: </gray><aqua><underlined>https://cytonic.net</underlined></aqua>").appendNewline());
     }
 }

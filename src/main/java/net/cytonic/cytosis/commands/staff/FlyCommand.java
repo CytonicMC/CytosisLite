@@ -1,21 +1,19 @@
 package net.cytonic.cytosis.commands.staff;
 
-import net.cytonic.cytosis.commands.utils.CommandUtils;
-import net.cytonic.cytosis.commands.utils.CytosisCommand;
 import net.cytonic.cytosis.utils.Msg;
+import net.minestom.server.command.builder.Command;
 import net.minestom.server.entity.Player;
 
 /**
  * The class representing the fly command
  */
-public class FlyCommand extends CytosisCommand {
+public class FlyCommand extends Command {
 
     /**
      * Creates a new command and sets up the consumers and execution logic
      */
     public FlyCommand() {
         super("fly");
-        setCondition(CommandUtils.IS_STAFF);
         setDefaultExecutor((sender, cmdc) -> {
             if (sender instanceof final Player player) {
 

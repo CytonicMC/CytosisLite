@@ -1,10 +1,7 @@
 package net.cytonic.cytosis.events;
 
-import io.opentelemetry.api.common.Attributes;
 import lombok.NoArgsConstructor;
 import net.cytonic.cytosis.Cytosis;
-import net.cytonic.cytosis.config.CytosisSettings;
-import net.cytonic.cytosis.data.enums.ChatChannel;
 import net.cytonic.cytosis.data.enums.NPCInteractType;
 import net.cytonic.cytosis.events.api.Async;
 import net.cytonic.cytosis.events.api.Listener;
@@ -13,24 +10,22 @@ import net.cytonic.cytosis.events.npcs.NpcInteractEvent;
 import net.cytonic.cytosis.logging.Logger;
 import net.cytonic.cytosis.npcs.NPC;
 import net.cytonic.cytosis.player.CytosisPlayer;
-import net.cytonic.cytosis.utils.CytosisPreferences;
-import net.cytonic.cytosis.utils.Msg;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
-import net.minestom.server.entity.*;
+import net.minestom.server.entity.GameMode;
+import net.minestom.server.entity.ItemEntity;
+import net.minestom.server.entity.Player;
+import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.entity.EntityAttackEvent;
 import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.event.player.*;
 import net.minestom.server.event.server.ServerTickMonitorEvent;
 import net.minestom.server.item.ItemStack;
-import net.minestom.server.network.packet.server.play.EntityMetaDataPacket;
 import net.minestom.server.utils.time.TimeUnit;
 
 import java.time.Duration;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -82,99 +77,20 @@ public final class ServerEventListeners {
     }
 
     @Listener
-    @Priority(0)
-    @Async
-    private void onPacketOut(PlayerPacketOutEvent e) {
-        if (!(e.getPacket() instanceof EntityMetaDataPacket packet)) return;
-        if (!((CytosisPlayer) e.getPlayer()).isStaff()) return;
-        if (!Cytosis.getVanishManager().getVanished().containsValue(packet.entityId())) return;
-
-        Map<Integer, Metadata.Entry<?>> entries = new HashMap<>(packet.entries());
-
-        byte bitmask = 0;
-        if (entries.containsKey(0)) {
-            bitmask = ((Metadata.Entry<Byte>) entries.get(0)).value();
-        }
-        if ((bitmask & 0x40) == 0x40 && (bitmask & 0x20) == 0x20) {
-            return; // don't need to modify (also prevents a stackoverflow)
-        }
-        e.setCancelled(true);
-        bitmask |= 0x20 | 0x40;
-        entries.put(0, Metadata.Byte(bitmask));
-        Cytosis.getOnlinePlayers().forEach(p -> {
-            if (!p.isStaff()) return;
-            p.sendPacket(new EntityMetaDataPacket(packet.entityId(), entries));
-        });
-    }
-
-    @Priority(1)
-    @Listener
     private void onConfig(AsyncPlayerConfigurationEvent event) {
-        final Player player = event.getPlayer();
-        if (!Cytosis.getFlags().contains("--no-instance"))
-            event.setSpawningInstance(Cytosis.getDefaultInstance());
-        player.setRespawnPoint(CytosisSettings.SERVER_SPAWN_POS);
-
-        // load things as easily as possible
-        Cytosis.getFriendManager().loadFriends(player.getUuid());
-        Cytosis.getPreferenceManager().loadPlayerPreferences(player.getUuid());
+        Logger.debug("Player " + event.getPlayer().getUsername() + " has joined the server.");
+        event.setSpawningInstance(Cytosis.getDefaultInstance());
     }
 
     @Listener
     @Priority(1)
     private void onSpawn(PlayerSpawnEvent event) {
         final CytosisPlayer player = (CytosisPlayer) event.getPlayer();
-        Logger.info(player.getUsername() + " (" + player.getUuid() + ") joined with the ip: " + player.getPlayerConnection().getRemoteAddress());
-        Cytosis.getDatabaseManager().getMysqlDatabase().logPlayerJoin(player.getUuid(), player.getPlayerConnection().getRemoteAddress());
+        player.setupSkin();
         player.setGameMode(GameMode.ADVENTURE);
-        Cytosis.getDatabaseManager().getMysqlDatabase().addPlayer(player);
         Cytosis.getSideboardManager().addPlayer(player);
         Cytosis.getPlayerListManager().setupPlayer(player);
-        Cytosis.getRankManager().addPlayer(player);
         Cytosis.getCommandHandler().recalculateCommands(player);
-        if (player.getPreference(CytosisPreferences.VANISHED)) {
-            player.setVanished(true);
-        }
-        try {
-            if (player.getPreference(CytosisPreferences.NICKNAME_DATA) != null) {
-                Cytosis.getNicknameManager().loadNickedPlayer(player);
-            }
-        } catch (Exception e) {
-            Logger.error("Failed to load nickname data for " + player.getUsername() + " (" + player.getUuid() + ")", e);
-        }
-        for (CytosisPlayer p : Cytosis.getOnlinePlayers()) {
-            if (p.isVanished()) p.setVanished(true);
-        }
-        if (!player.hasPlayedBefore() && Cytosis.isMetricsEnabled()) {
-            // add a new player who hasn't played before
-            Cytosis.getMetricsManager().addToLongCounter("players.unique", 1, Attributes.empty());
-        }
-    }
-
-    @Listener
-    @Priority(1)
-    private void onChat(PlayerChatEvent event) {
-        final CytosisPlayer player = (CytosisPlayer) event.getPlayer();
-        event.setCancelled(true);
-        Cytosis.getDatabaseManager().getMysqlDatabase().isMuted(player.getUuid()).whenComplete((isMuted, throwable) -> {
-            if (throwable != null) {
-                Logger.error("An error occurred whilst checking if the player is muted!", throwable);
-                return;
-            }
-            if (!isMuted) {
-                Cytosis.getDatabaseManager().getMysqlDatabase().addChat(player.getUuid(), event.getRawMessage());
-                String originalMessage = event.getRawMessage();
-                ChatChannel channel = Cytosis.getChatManager().getChannel(player.getUuid());
-                if (player.canUseChannel(channel) || channel == ChatChannel.ALL) {
-                    Cytosis.getChatManager().sendMessage(originalMessage, channel, player);
-                } else {
-                    player.sendMessage(Msg.whoops("It looks like you can't chat in the " + channel.name().toLowerCase() + " channel. \uD83E\uDD14"));
-                    Cytosis.getChatManager().setChannel(player.getUuid(), ChatChannel.ALL);
-                }
-                return;
-            }
-            player.sendMessage(Msg.whoops("You're currently muted."));
-        });
     }
 
     @Listener
@@ -182,10 +98,6 @@ public final class ServerEventListeners {
     private void onQuit(PlayerDisconnectEvent event) {
         final CytosisPlayer player = (CytosisPlayer) event.getPlayer();
         Cytosis.getSideboardManager().removePlayer(player);
-        Cytosis.getFriendManager().unloadPlayer(player.getUuid());
-        if (Cytosis.getPreferenceManager().getPlayerPreference(player.getUuid(), CytosisPreferences.VANISHED)) {
-            Cytosis.getVanishManager().disableVanish(player);
-        }
     }
 
     @Listener

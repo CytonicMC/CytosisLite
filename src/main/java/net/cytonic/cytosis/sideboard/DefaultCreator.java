@@ -30,15 +30,12 @@ public class DefaultCreator implements SideboardCreator {
     public List<Component> lines(CytosisPlayer player) {
         try {
             return List.of(
-                    Msg.mm("<gray>" + Cytosis.SERVER_ID),
-                    Msg.mm("<green>Players: " + Cytosis.getCytonicNetwork().getOnlinePlayers().size()),
                     Msg.mm(""),
-                    Msg.mm("Cytosis v" + Cytosis.VERSION),
                     Msg.mm(""),
-                    Msg.mm("<green>Rank: ").append(Component.text(player.getRank().name(), (player.getRank().getTeamColor()))),
-                    Msg.mm("<green>Chat Channel<white>: " + player.getChatChannel().name()),
+                    Msg.mm("This is a sidebar."),
                     Msg.mm(""),
-                    Msg.mm("<yellow>mc.cytonic.net")
+                    Msg.mm(""),
+                    Msg.yellow("Foxikle & Webhead1104")
             );
         } catch (Exception e) {
             Logger.error("error", e);
@@ -48,6 +45,6 @@ public class DefaultCreator implements SideboardCreator {
 
     @Override
     public Component title(CytosisPlayer player) {
-        return Msg.mm("<yellow><bold>Cytosis</bold></yellow>");
+        return Msg.mm("<yellow><bold>CytosisLite</bold></yellow>");
     }
 }

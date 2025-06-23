@@ -2,7 +2,6 @@ package net.cytonic.cytosis.events;
 
 import io.github.classgraph.ClassGraph;
 import net.cytonic.cytosis.Cytosis;
-import net.cytonic.cytosis.plugins.loader.PluginClassLoader;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.trait.CancellableEvent;
@@ -35,7 +34,6 @@ public class EventHandler {
     public void findEvents() {
         List<ClassLoader> loaders = new ArrayList<>();
         loaders.add(Cytosis.class.getClassLoader());
-        loaders.addAll(PluginClassLoader.loaders);
 
         final ClassGraph CLASS_GRAPH = new ClassGraph()
                 .acceptPackages("net.minestom", "net.cytonic", "io.github.togar2") // cytonic things, and PVP

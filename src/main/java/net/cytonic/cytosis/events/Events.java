@@ -2,8 +2,6 @@ package net.cytonic.cytosis.events;
 
 import net.cytonic.cytosis.events.api.Listener;
 import net.cytonic.cytosis.events.api.Priority;
-import net.cytonic.cytosis.events.network.PlayerJoinNetworkEvent;
-import net.cytonic.cytosis.events.network.PlayerLeaveNetworkEvent;
 import net.cytonic.cytosis.utils.events.PlayerJoinEventResponse;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.*;
@@ -22,8 +20,6 @@ import java.util.function.Consumer;
  */
 @SuppressWarnings({"unused"})
 public class Events {
-    public static final List<Consumer<PlayerLeaveNetworkEvent>> networkLeave = new ArrayList<>();
-    public static final List<Consumer<PlayerJoinNetworkEvent>> networkJoin = new ArrayList<>();
     private static final List<Consumer<AsyncPlayerConfigurationEvent>> config = new ArrayList<>();
     private static final List<Consumer<PlayerLoadedEvent>> join = new ArrayList<>();
     private static final List<Consumer<PlayerDisconnectEvent>> disconnect = new ArrayList<>();
@@ -36,16 +32,6 @@ public class Events {
 
     private Events() {
 
-    }
-
-    @Listener
-    public void onEvent(final PlayerJoinNetworkEvent event) {
-        networkJoin.forEach(consumer -> consumer.accept(event));
-    }
-
-    @Listener
-    public void onEvent(final PlayerLeaveNetworkEvent event) {
-        networkLeave.forEach(consumer -> consumer.accept(event));
     }
 
     @Listener
@@ -232,28 +218,4 @@ public class Events {
     public static void onPacketOutLowPriority(Consumer<PlayerPacketOutEvent> event) {
         packetOutLow.add(event);
     }
-
-
-    /**
-     * Registers a consumer that will be executed when a player joins the network.
-     * This method adds the given consumer to the internal handler for network join events.
-     *
-     * @param event The consumer that processes the player join network event.
-     */
-    public static void onNetworkJoin(Consumer<PlayerJoinNetworkEvent> event) {
-        networkJoin.add(event);
-    }
-
-
-    /**
-     * Registers a consumer that will be executed when a player leaves the network.
-     * This method adds the given consumer to the internal handler for network leave events.
-     *
-     * @param event The consumer that processes the player leave network event.
-     */
-    public static void onNetworkLeave(Consumer<PlayerLeaveNetworkEvent> event) {
-        networkLeave.add(event);
-    }
-
-
 }

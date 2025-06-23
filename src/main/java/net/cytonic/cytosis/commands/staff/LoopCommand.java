@@ -1,17 +1,16 @@
 package net.cytonic.cytosis.commands.staff;
 
-import net.cytonic.cytosis.commands.utils.CommandUtils;
-import net.cytonic.cytosis.commands.utils.CytosisCommand;
 import net.cytonic.cytosis.player.CytosisPlayer;
 import net.cytonic.cytosis.utils.Msg;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.timer.TaskSchedule;
 
 /**
  * A command that loops other commands
  */
-public class LoopCommand extends CytosisCommand {
+public class LoopCommand extends Command {
     /**
      * A constructor for the loop command.
      */
@@ -21,8 +20,6 @@ public class LoopCommand extends CytosisCommand {
         var iterationsArg = ArgumentType.Integer("iterations");
         var periodArg = ArgumentType.Integer("period");
         var commandArg = ArgumentType.StringArray("command").setDefaultValue(new String[0]);
-
-        setCondition(CommandUtils.IS_STAFF);
 
         setDefaultExecutor((commandSender, cmdc) -> {
             if (!(commandSender instanceof CytosisPlayer player)) {

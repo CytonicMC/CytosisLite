@@ -1,10 +1,10 @@
 package net.cytonic.cytosis.commands.server;
 
 import net.cytonic.cytosis.Cytosis;
-import net.cytonic.cytosis.commands.utils.CytosisCommand;
 import net.cytonic.cytosis.player.CytosisPlayer;
+import net.minestom.server.command.builder.Command;
 
-public class RecalculatePermissionsCommand extends CytosisCommand {
+public class RecalculatePermissionsCommand extends Command {
 
     public RecalculatePermissionsCommand() {
         super("recalculatepermissions", "recalcperms");

@@ -18,7 +18,7 @@ public class ActionbarManager {
     private final Map<UUID, Queue<Component>> messageQueues = new ConcurrentHashMap<>();
     private final Set<UUID> cooldowns = new HashSet<>();
     @Setter
-    private ActionbarSupplier defaultSupplier = ActionbarSupplier.DEFAULT;
+    private ActionbarSupplier defaultSupplier = ActionbarSupplier.EMPTY;
 
     /**
      * Sets up the manager, registering event listeners, and starting the loop.

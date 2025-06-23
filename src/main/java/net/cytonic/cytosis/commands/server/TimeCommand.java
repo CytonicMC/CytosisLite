@@ -1,23 +1,21 @@
 package net.cytonic.cytosis.commands.server;
 
 import net.cytonic.cytosis.Cytosis;
-import net.cytonic.cytosis.commands.utils.CommandUtils;
-import net.cytonic.cytosis.commands.utils.CytosisCommand;
 import net.cytonic.cytosis.utils.Msg;
+import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.suggestion.SuggestionEntry;
 
 /**
  * The class representing the time command
  */
-public class TimeCommand extends CytosisCommand {
+public class TimeCommand extends Command {
 
     /**
      * Creates a new command and sets up the consumers and execution logic
      */
     public TimeCommand() {
         super("time");
-        setCondition(CommandUtils.IS_STAFF);
         var timeArgument = ArgumentType.Word("time").from("day", "night", "noon", "midnight", "sunrise", "sunset", "freeze");
         var timeInteger = ArgumentType.Integer("timeInteger");
         timeArgument.setSuggestionCallback((sender, cmdc, suggestion) -> {

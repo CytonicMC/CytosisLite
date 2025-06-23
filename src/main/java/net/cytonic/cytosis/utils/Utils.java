@@ -1,11 +1,7 @@
 package net.cytonic.cytosis.utils;
 
-import com.google.common.reflect.TypeToken;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
-import net.cytonic.cytosis.data.containers.ServerStatusContainer;
-import net.cytonic.cytosis.data.objects.TypedNamespace;
-import net.cytonic.cytosis.data.objects.preferences.Preference;
 import net.cytonic.cytosis.logging.Logger;
 import org.jetbrains.annotations.Nullable;
 
@@ -27,17 +23,6 @@ public final class Utils {
      * A decimal format rounding to two decimal places
      */
     public static final DecimalFormat TWO_PLACES = new DecimalFormat("0.00");
-    /**
-     * A type token for a list of UUIDs
-     */
-    public final static Type UUID_LIST = new TypeToken<List<UUID>>() {}.getType();
-
-    public static final Type SERVER_LIST = new TypeToken<List<ServerStatusContainer>>() {
-    }.getType();
-    /**
-     * A type token for a map of namespaced preferences keyed by NamespaceID
-     */
-    public final static TypeToken<Map<TypedNamespace<?>, Preference<?>>> PREFERENCE_MAP = new TypeToken<>() {};
 
     /**
      * Creates a MUTABLE list from a vararg, for immutable lists, use {@link List#of(Object...)}

@@ -1,11 +1,8 @@
 FROM eclipse-temurin:21.0.7_6-jre-jammy
-LABEL authors="CytonicMC"
+LABEL authors="Foxikle & Webhead1104"
 
 # Set the working directory
 WORKDIR /app
-# OTEL stuff
-ARG OTEL_PORT
-ARG OTEL_HOST
 
 #ENV OTEL_PORT=${OTEL_PORT}
 #ENV OTEL_HOSTNAME=${OTEL_HOST}

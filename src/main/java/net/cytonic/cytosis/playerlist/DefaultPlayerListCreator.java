@@ -34,13 +34,9 @@ public class DefaultPlayerListCreator implements PlayerlistCreator {
         columns.add(new Column(Msg.mm("<dark_aqua><b>     Server Info"), PlayerListFavicon.BLUE,
                 Utils.list(new PlayerListEntry(Msg.mm("<dark_aqua>Uptime: " + DurationParser.unparse(start, " ")), 0),
                         new PlayerListEntry(Component.empty(), 1),
-                        new PlayerListEntry(Msg.mm("<dark_aqua>Players: " + Cytosis.getOnlinePlayers().size()), 2),
-                        new PlayerListEntry(Msg.mm("<dark_aqua>Version: " + Cytosis.VERSION), 3),
-                        new PlayerListEntry(Msg.mm("<dark_aqua>ID: " + Cytosis.getRawID()), 4),
-                        new PlayerListEntry(Msg.mm("<darK_aqua>Network Players: " + Cytosis.getCytonicNetwork().getOnlinePlayers().size()), 5)
+                        new PlayerListEntry(Msg.mm("<dark_aqua>Players: " + Cytosis.getOnlinePlayers().size()), 2)
                 )));
         columns.add(new Column(Msg.mm("<yellow><b>     Player Info"), PlayerListFavicon.YELLOW, Utils.list(
-                new PlayerListEntry(Msg.mm("<yellow>Rank: " + player.getRank().name()), 0),
                 new PlayerListEntry(Msg.mm("<yellow>Ping: " + player.getLatency() + "ms"), 1),
                 new PlayerListEntry(Msg.mm("<yellow>Locale: " + player.getLocale()), 2)
         )));

@@ -23,10 +23,7 @@ repositories {
 dependencies {
     api(libs.minestom)
     api(libs.gson)
-    api(libs.okhttp)
     api(libs.polar)
-    api(libs.jedis)
-    api(libs.guava)
     api(libs.minestompvp) {
         exclude(group = "net.minestom", module = "minestom-snapshots")
     }
@@ -38,20 +35,13 @@ dependencies {
 
 
     runtimeDownload(libs.minimessage)
-    runtimeDownload(libs.mysql)
     runtimeDownload(libs.reflections)
     runtimeDownload(libs.bundles.log4j)
-    runtimeDownload(libs.jnats)
-    runtimeDownload(libs.jooq)
-    runtimeDownload(libs.bundles.otel)
 
     // the compileonlyapis need to be downloaded at runtime, too.
     runtimeDownloadOnly(libs.minestom)
     runtimeDownloadOnly(libs.gson)
-    runtimeDownloadOnly(libs.okhttp)
     runtimeDownloadOnly(libs.polar)
-    runtimeDownloadOnly(libs.jedis)
-    runtimeDownloadOnly(libs.guava)
     runtimeDownloadOnly(libs.stomui) {
         exclude(group = "net.minestom", module = "minestom-snapshots")
     }

@@ -24,12 +24,7 @@ public class ArgumentPlayer extends Argument<CytosisPlayer> {
 
     @Override
     public @NotNull CytosisPlayer parse(@NotNull CommandSender sender, @NotNull String input) throws ArgumentSyntaxException {
-        CytosisPlayer player = Cytosis.getPlayer(input).orElse(null);
-        if (player == null) {
-            // not known by this name
-            player = Cytosis.getNicknameManager().getPlayerByNickname(input);
-        }
-        return player;
+        return Cytosis.getPlayer(input).orElse(null);
     }
 
     @Override
