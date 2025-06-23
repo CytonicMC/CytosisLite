@@ -1,2 +1,2 @@
-rootProject.name = "Cytosis"
+rootProject.name = "Cytosis Lite"
 
