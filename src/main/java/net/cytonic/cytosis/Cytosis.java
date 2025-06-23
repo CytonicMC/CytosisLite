@@ -10,7 +10,7 @@ import io.github.togar2.pvp.feature.CombatFeatureSet;
 import io.github.togar2.pvp.feature.CombatFeatures;
 import lombok.Getter;
 import lombok.Setter;
-import net.cytonic.cytosis.commands.utils.CommandHandler;
+import net.cytonic.cytosis.commands.CommandHandler;
 import net.cytonic.cytosis.data.adapters.InstantAdapter;
 import net.cytonic.cytosis.data.adapters.KeyAdapter;
 import net.cytonic.cytosis.data.serializers.KeySerializer;
@@ -214,6 +214,7 @@ public final class Cytosis {
 
                 Class<? extends Event> eventClass;
                 try {
+                    //noinspection unchecked
                     eventClass = (Class<? extends Event>) method.getParameterTypes()[0];
                 } catch (ClassCastException e) {
                     Logger.error("The parameter of a method annotated with @Listener must be a valid event!", e);
@@ -223,6 +224,7 @@ public final class Cytosis {
                     return;
                 }
 
+                //noinspection unchecked
                 eventHandler.registerListener(new EventListener<>(
                         "cytosis:annotation-listener-" + counter.getAndIncrement(),
                         async, priority, (Class<Event>) eventClass, event -> {

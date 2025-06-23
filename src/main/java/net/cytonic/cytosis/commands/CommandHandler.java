@@ -1,10 +1,7 @@
-package net.cytonic.cytosis.commands.utils;
+package net.cytonic.cytosis.commands;
 
 import lombok.NoArgsConstructor;
 import net.cytonic.cytosis.Cytosis;
-import net.cytonic.cytosis.commands.defaultMinecraft.GamemodeCommand;
-import net.cytonic.cytosis.commands.server.*;
-import net.cytonic.cytosis.commands.staff.*;
 import net.cytonic.cytosis.player.CytosisPlayer;
 import net.cytonic.cytosis.utils.Msg;
 import net.minestom.server.command.CommandManager;
@@ -27,12 +24,6 @@ public class CommandHandler {
         });
 
         cm.register(
-                new GamemodeCommand(),
-                new FlyCommand(),
-                new TimeCommand(),
-                new PingCommand(),
-                new LoopCommand(),
-                new RecalculatePermissionsCommand()
         );
     }
 
