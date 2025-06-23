@@ -4,17 +4,11 @@ LABEL authors="Foxikle & Webhead1104"
 # Set the working directory
 WORKDIR /app
 
-#ENV OTEL_PORT=${OTEL_PORT}
-#ENV OTEL_HOSTNAME=${OTEL_HOST}
-
 # Copy cytosis Jar
 ADD ../../build/libs/cytosis.jar .
 
-# Conditionally copy config.json (if it exists at build time)
-COPY ../../config.json* .
-
 # Expose the port
-EXPOSE 25567
+EXPOSE 25565
 
 # Run the java
 CMD ["java", "-jar", "cytosis.jar"]
