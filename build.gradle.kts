@@ -1,10 +1,8 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 plugins {
-    `maven-publish`
-    `java-library`
     id("java")
-    id("com.gradleup.shadow") version "8.3.6"
+    id("com.gradleup.shadow") version "9.0.0-beta17"
     id("com.github.harbby.gradle.serviceloader") version ("1.1.9")
     id("io.freefair.lombok") version "8.14"
 }
@@ -20,18 +18,18 @@ repositories {
 }
 
 dependencies {
-    api(libs.minestom)
-    api(libs.gson)
-    api(libs.polar)
-    api(libs.minestompvp) {
+    implementation(libs.minestom)
+    implementation(libs.gson)
+    implementation(libs.polar)
+    implementation(libs.minestompvp) {
         exclude(group = "net.minestom", module = "minestom-snapshots")
     }
-    api(libs.stomui) {
+    implementation(libs.stomui) {
         exclude(group = "net.minestom", module = "minestom-snapshots")
     }
-    api(libs.configurate)
-    api(libs.classgraph)
-    api(libs.bundles.log4j)
+    implementation(libs.configurate)
+    implementation(libs.classgraph)
+    implementation(libs.bundles.log4j)
 }
 
 tasks.withType<Javadoc> {
