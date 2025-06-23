@@ -1,11 +1,7 @@
 package net.cytonic.cytosis.files;
 
 import lombok.NoArgsConstructor;
-import net.cytonic.cytosis.config.CytosisSettings;
 import net.cytonic.cytosis.logging.Logger;
-import org.spongepowered.configurate.ConfigurationNode;
-import org.spongepowered.configurate.gson.GsonConfigurationLoader;
-import org.spongepowered.configurate.transformation.ConfigurationTransformation;
 
 import java.io.*;
 import java.nio.file.Path;
@@ -15,36 +11,6 @@ import java.nio.file.Path;
  */
 @NoArgsConstructor
 public class FileManager {
-
-    private static final Path CONFIG_PATH = Path.of("config.json");
-
-    /**
-     * Initializes the necessary files and configurations.
-     */
-    public void init() {
-        try {
-            createConfigFile();
-            GsonConfigurationLoader loader = GsonConfigurationLoader.builder().file(CONFIG_PATH.toFile()).build();
-            ConfigurationNode node = loader.load();
-            ConfigurationTransformation transformation = ConfigurationTransformation.builder()
-                    .build();
-            transformation.apply(node);
-            loader.save(node);
-            CytosisSettings.importConfig(node);
-        } catch (Exception exception) {
-            Logger.error("Failed to parse config file!", exception);
-        }
-    }
-
-    /**
-     * Creates the config file if it doesn't exist.
-     */
-    public void createConfigFile() {
-        if (!CONFIG_PATH.toFile().exists()) {
-            Logger.info("No config file found, creating...");
-            extractResource("config.json", CONFIG_PATH);
-        }
-    }
 
     /**
      * Extracts a resource file from the classpath and writes it to the specified path.

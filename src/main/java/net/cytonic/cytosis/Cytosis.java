@@ -11,7 +11,6 @@ import io.github.togar2.pvp.feature.CombatFeatures;
 import lombok.Getter;
 import lombok.Setter;
 import net.cytonic.cytosis.commands.utils.CommandHandler;
-import net.cytonic.cytosis.config.CytosisSettings;
 import net.cytonic.cytosis.data.adapters.InstantAdapter;
 import net.cytonic.cytosis.data.adapters.KeyAdapter;
 import net.cytonic.cytosis.data.serializers.KeySerializer;
@@ -164,14 +163,6 @@ public final class Cytosis {
         Logger.info("Creating file manager");
         fileManager = new FileManager();
 
-        // Everything after this point depends on config contents
-        Logger.info("Initializing file manager");
-        fileManager.init();
-
-        Logger.info("Loading Cytosis Settings");
-        CytosisSettings.loadEnvironmentVariables();
-        CytosisSettings.loadCommandArgs();
-
         Logger.info("Initializing block placements");
         BlockPlacementUtils.init();
 
@@ -245,9 +236,7 @@ public final class Cytosis {
             }
         }
 
-        // Start the server
-        Logger.info("Server started on port " + CytosisSettings.SERVER_PORT);
-        minecraftServer.start("0.0.0.0", CytosisSettings.SERVER_PORT);
+        minecraftServer.start("0.0.0.0", 25565);
         MinecraftServer.getExceptionManager().setExceptionHandler(e -> Logger.error("Uncaught exception: ", e));
 
         long end = System.currentTimeMillis();
